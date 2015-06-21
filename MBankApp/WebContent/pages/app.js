@@ -11,7 +11,7 @@
 	    	templateUrl: "login.html",
 			controller:  "LoginController"
 	    })
-	    when("/client/:name", {
+	    .when("/client/:name", {
 			templateUrl: "client.html",
 			controller:  "ClientController"
 		})
