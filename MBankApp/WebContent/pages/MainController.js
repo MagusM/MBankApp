@@ -1,10 +1,9 @@
 (function(){
-	var app = angular.module("mbankApp", []);
+	var app = angular.module("mbankApp");
 
-	var MainController = function ($scope, $location, $routeParams, mbank) {
+	var MainController = function ($scope) {
 		
 	};
 
 	app.controller("MainController", MainController);
-
 }());

@@ -1,7 +1,7 @@
 (function(){
-	var app = angular.module("mbankApp", []);
+	var app = angular.module("mbankApp");
 
-	var ClientController = function ($rootScope, $scope, $location, $routeParams) {
+	var ClientController = function ($scope) {
 	};
 
 	app.controller("ClientController", ClientController);

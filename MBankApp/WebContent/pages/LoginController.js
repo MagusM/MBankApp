@@ -1,7 +1,7 @@
 (function(){
-	var app = angular.module("mbankApp", []);
+	var app = angular.module("mbankApp");
 
-	var LoginController = function ($scope, $location, mbank) {
+	var LoginController = function ($scope) {
 		$scope.checkId = function (isIdValid) {
 			$scope.loginError_show = false;
 			if (!isIdValid) {
