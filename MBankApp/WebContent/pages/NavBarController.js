@@ -18,14 +18,13 @@
 		$scope.showAdminPanel = function() {
 			var url = "http://localhost:8080/MBankApp/MBank/MBankRoot/adminPanel";
 			var onAdminPanelSuccess = function(response){
-				logout();
 			};
 			var onAdminPanelError = function(reason){
 				console.log("Failed to start admin panel");
 			};
 			mbank.reachMBank(url).then(onAdminPanelSuccess, onAdminPanelError);
 		};
-		var logout = function() {
+		$scope.logout = function() {
 			var url = "http://localhost:8080/MBankApp/MBank/MBankRoot/logout";
 			var onLogoutSuccess = function(response){
 				$location.path("/main");
@@ -35,7 +34,6 @@
 			};
 			mbank.reachMBank(url).then(onLogoutSuccess, onlogoutError);
 		};
-		$scope.logout = this.logout; 
 		
 		$scope.lol = function() {
 			alert("You Don't Have A Choice, LOL!!!");
