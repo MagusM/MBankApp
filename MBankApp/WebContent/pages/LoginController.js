@@ -1,7 +1,7 @@
 (function(){
-	var app = angular.module("mbankApp");
+	var app = angular.module("app");
 
-	var LoginController = function ($scope) {
+	var LoginController = function ($scope, $location, mbank) {
 		$scope.checkId = function (isIdValid) {
 			$scope.loginError_show = false;
 			if (!isIdValid) {
@@ -15,15 +15,18 @@
 		};
 
 		$scope.login = function (client) {
+			var confirmedClient = null;
 			$scope.loginError_show = false;
 			var url = "http://localhost:8080/MBankApp/MBank/MBankRoot/login";
 			var loginPostComplete = function(response) {
 				$scope.loginError_show = false;
-				if (response.status == 204) {
+				if (response.status == 409 || response.status == 204) {
 					$scope.loginError_show = true;
 					$scope.loginError_msg = "Please Enter Valid Client Details";
-				}if (response.status == 201) {
-					$location.path("/client" + response.name);
+				}if (response.status == 200) {
+					confirmedClient = response.data;
+					if (confirmedClient.comment == null) {confirmedClient.comment = "No Comment";}
+					$location.path("/client/" + confirmedClient.name);
 				}
 			};
 			var loginPostError = function(reason) {
@@ -31,7 +34,7 @@
 				$scope.loginError_show = true;
 				$scope.loginError_msg = "Please Enter Valid Client Details";
 			};
-			mbank.getClient(url, client).then(loginPostComplete, loginPostError);
+			mbank.sendDataToMbank(url, client).then(loginPostComplete, loginPostError);
 		};
 	};
 

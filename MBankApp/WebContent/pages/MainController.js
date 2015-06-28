@@ -1,6 +1,6 @@
 (function(){
-	var app = angular.module("mbankApp");
-
+	var app = angular.module("app");
+	
 	var MainController = function ($scope) {
 		
 	};

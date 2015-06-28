@@ -1,28 +1,27 @@
 (function(){
 	var mbank = function($http) {
 		
-		var getActiveClient = function(formClient) {
-			var url = "http://localhost:8080/MBankApp/MBank/MBankRoot/login";
-			return $http.post(url, formClient)
+		var postToMBank = function(url, data) {
+			return $http.post(url, data)
 				.then(function(response){
-					return response.data;
+					return response;
 				});
 		};
 		
 		var useGet = function(url) {
 			return $http.get(url)
 				.then(function(response) {
-					return response.data;
+					return response;
 				});
 		};
 		
 		return {
-			getClient: getActiveClient,
-			get: useGet
+			sendDataToMbank: postToMBank,
+			reachMBank: useGet
 		};
 	};
 	
-	var module = angular.module("mbankApp");
+	var module = angular.module("app");
 	module.factory("mbank", mbank);
 	
 }());

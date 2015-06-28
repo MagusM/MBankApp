@@ -1,93 +1,78 @@
 <div id="client-div" class="container-fluid">
 	<div class="row">
-		<div id="clientActionSideBar" class="col-sm-3 col-md-2 sidebar">
+		<div id="clientActionSideBar" class="col-sm-3 col-md-2 sidebar" style="height: 80%">
 			<ul class="nav nav-sidebar">
-				<li class="active"><a href="#">Overview <span
+				<li class="active"><a href="">Overview <span
 						class="sr-only">(current)</span></a></li>
-				<li><a href="#">Reports</a></li>
-				<li><a href="#">Analytics</a></li>
-				<li><a href="#">Export</a></li>
+				<li><a href="">Reports</a></li>
+				<li><a href="">Analytics</a></li>
+				<li><a href="">Export</a></li>
 			</ul>
 			<ul class="nav nav-sidebar">
-				<li><a href="">Update Details</a></li>
-				<li><a href="">View Account</a></li>
-				<li><a href="">View Deposit/s</a></li>
-				<li><a href="">Deposit</a></li>
-				<li><a href="">Withdraw</a></li>
+				<li><a role="button" href="" ng-click="showUpdateClientDiv()">Update Details</a></li>
+				<li><a role="button" ng-click="showViewAccountDiv()" href="">View Account</a></li>
+				<li><a role="button" ng-click="showViewDepositsDiv()" href="">View Deposit/s</a></li>
+				<li><a role="button" ng-click="showViewDepositToAccountDiv()" href="">Deposit</a></li>
+				<li><a role="button" ng-click="showViewWithdrawFromAccountDiv()" href="">Withdraw</a></li>
 			</ul>
 			<ul class="nav nav-sidebar">
-				<li><a href="">Create New Deposit</a></li>
-				<li><a href="">Pre Open Deposit</a></li>
-				<li><a href="">View Activities</a></li>
+				<li><a role="button" ng-click="showCreateNewDepositDiv()" href="">Create New Deposit</a></li>
+				<li><a role="button" ng-click="showPreOpenDepositDiv()"  href="">Pre Open Deposit</a></li>
+				<li><a role="button" ng-click="showViewActivitiesDiv()"  href="">View Activities</a></li>
 			</ul>
 		</div>
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-			<h1 class="page-header">Client Details</h1>
-
-			<div class="row placeholders">
+			<h1 class="page-header"><strong>Welcome back {{name}}.</strong> <br>Here Is A Summary Of Your Details</h1>
+			<div class="row placeholders" ng-model="summary" ng-show="summary">
 				<div class="col-xs-6 col-sm-3 placeholder">
-					<h4>Account Balance</h4>
-					<span class="text-muted">{{summary.account_balance}}</span>
+					<h4>Account Balance</h4><br>
+					<span class="text-muted">{{summary.accountBalance}} USD</span>
 				</div>
 				<div class="col-xs-6 col-sm-3 placeholder">
-					<h4>Deposits Balance</h4>
-					<span class="text-muted">{{summary.deposits_balance}}</span>
+					<h4>Deposits Balance</h4><br>
+					<span class="text-muted">{{summary.depositsBalance}} USD</span>
 				</div>
 				<div class="col-xs-6 col-sm-3 placeholder">
-					<h4>Account Type</h4>
-					<span class="text-muted">{{summary.account_type}}</span>
+					<h4>Account Type</h4><br>
+					<span class="text-muted">{{summary.accountType}}</span>
 				</div>
 				<div class="col-xs-6 col-sm-3 placeholder">
-					<h4>Credit Limit</h4>
-					<span class="text-muted">{{summary.credit_limit}}</span>
+					<h4>Credit Limit</h4><br>
+					<span class="text-muted">{{summary.creditLimit}}</span>
 				</div>
 			</div>
 
-			<h2 class="sub-header">Section title</h2>
-
-			<div id="clientTable" class="table-responsive">
+			<div id="clientTable" class="table-responsive" ng-switch="divToShow" ng-init="divToShow='userWelcome'">
 				<div class="container">
-					<!--
-                              update client 
-                             -->
-					<div class="container"
-						ng-show="clientActionShow == 'showUodateClient'">
+				    <div class="alert alert-info" ng-switch-when="userWelcome" style="width:90%">
+                        <strong>{{name}}!</strong> Client Action On The Left Bar.
+                    </div>
+					<!-- update client -->
+					<div class="container" ng-switch-when="showUodateClient">
 						<h2>Enter new details to update</h2>
-						<form class="form-horizontal" role="form"
-							ng-submit="updateClient()">
+						<form class="form-horizontal" role="form" ng-submit="updateClient(client)" ng-model="client">
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="email">Email:</label>
 								<div class="col-sm-10">
-									<input type="email" class="form-control" id="email"
-										placeholder="Enter email">
+									<input type="email" class="form-control" id="email" placeholder="Enter email" ng-model="client.email">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="pwd">Password:</label>
 								<div class="col-sm-10">
-									<input type="password" class="form-control" id="pwd"
-										placeholder="Enter password">
+									<input type="password" class="form-control" id="pwd" placeholder="Enter password" ng-model="client.password">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="address">Address:</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" id="address"
-										placeholder="Enter Address">
+									<input type="text" class="form-control" id="address" placeholder="Enter Address" ng-model="client.address">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="phone">Phone:</label>
 								<div class="col-sm-10">
-									<input type="number" class="form-control" id="phone"
-										placeholder="Enter Phone">
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-offset-2 col-sm-10">
-									<div class="checkbox">
-										<label><input type="checkbox"> Remember me</label>
-									</div>
+									<input type="number" class="form-control" id="phone" placeholder="Enter Phone" ng-model="client.phone">
 								</div>
 							</div>
 							<div class="form-group">
@@ -96,31 +81,191 @@
 								</div>
 							</div>
 						</form>
+						<div class="alert alert-success" ng-show="clientUpdateSuccess">
+                            <strong>Success!</strong> {{clientUpdateSuccess}}.
+                        </div>
+						<div class="alert alert-danger" ng-show="clientUpdateError">
+                            <strong>Danger!</strong> {{clientUpdateError}}.
+                        </div>
 					</div>
 					<!--view account-->
-					<div></div>
-
+					<div ng-switch-when="showViewAccount">
+					   <h2 class="sub-header">{{name}}, you're account information</h2>
+					   <table class="table table-striped" ng-show="account" style="width:90%">
+		                    <thead>
+		                        <tr>
+		                            <th>id</th>
+		                            <th>owner</th>
+		                            <th>balance,USD</th>
+		                            <th>credit limit</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr>
+		                            <td>{{account.accountId}}</td>
+		                            <td>{{name}}</td>
+		                            <td>{{account.balance}}</td>
+		                            <td>{{account.creditLimit}}</td>
+		                        </tr>
+		                    </tbody>
+		               </table>
+					</div>
+					<!-- view deposits -->
+					<div ng-switch-when="showViewDeposits">
+					   <h2 class="sub-header">{{name}}, you're deposit/s information</h2>
+					   <table class="table table-striped" ng-show="deposits" style="width:90%">
+                            <thead>
+                                <tr>
+                                    <th>deposit id</th>
+                                    <th>owner</th>
+                                    <th>balance,USD</th>
+                                    <th>estimated balance,USD</th>
+                                    <th>deposit type</th>
+                                    <th>opening date</th>
+                                    <th>closing type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="dep in deposits">
+                                    <td>{{dep.depositId}}</td>
+                                    <td>{{name}}</td>
+                                    <td>{{dep.balance}}</td>
+                                    <td>{{dep.estimatedBalance}}</td>
+                                    <td>{{dep.depositType}}</td>
+                                    <td>{{dep.openingDate}}</td>
+                                    <td>{{dep.closingDate}}</td>
+                                </tr>
+                            </tbody>
+                       </table>
+					</div>
+                    <!-- deposit to account -->
+                    <div ng-switch-when="showDeposit">
+                        <h2 class="sub-header">{{name}}, Please Enter Amont To Deposit</h2>
+                        <form class="form-horizontal" role="form" ng-submit="depositToAccount(amount)" style="width:90%">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email">Amount To Deposit:</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="depositAmount" placeholder="Enter amont to deposit to you're account, USD" 
+                                                                    ng-model="amount">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="alert alert-success" ng-show="depositToAccountSuccess" style="width:90%">
+                            <strong>Success!</strong> {{name}}, {{depositToAccountSuccess}}.
+                        </div>
+                        <div class="alert alert-danger" ng-show="depositToAccountError" style="width:90%">
+                            <strong>Danger!</strong> {{name}}, {{depositToAccountError}}.
+                        </div>
+                    </div>
+                    <!-- withdraw from account -->
+                    <div ng-switch-when="showWithdraw">
+                        <h2 class="sub-header">{{name}}, Please Enter Amont To Withdraw</h2>
+                        <form class="form-horizontal" role="form" ng-submit="withdraeFromAccount(amount)" style="width:90%">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Amount To Withdraw:</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="depositAmount" placeholder="Enter amont to withdraw from you're account, USD" 
+                                                                    ng-model="amount">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="alert alert-success" ng-show="withdrawFromAccountSuccess" style="width:90%">
+                            <strong>Success!</strong> {{name}}, {{withdrawFromAccountSuccess}}.
+                        </div>
+                        <div class="alert alert-danger" ng-show="withdrawFromAccountError" style="width:90%">
+                            <strong>Danger!</strong> {{name}}, {{withdrawFromAccountError}}.
+                        </div>
+                    </div>
+                    <!-- create new deposit -->
+                    <div ng-switch-when="showCreateNewDeposit">
+                        <h2 class="sub-header">{{name}}, Please Fill the Form To Open New Deposit</h2>
+                        <form class="form-horizontal" role="form" ng-submit="openNewDeposit(newDeposit)" style="width:90%">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Amount To Open New Deposit:</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="newDepositAmount" placeholder="Enter amont to open a new deposit with, USD" 
+                                                                    ng-model="newDeposit.amount">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email">New Deposit Length:</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="newDepositLength" placeholder="Enter new deposit length in years" 
+                                                                    ng-model="newDeposit.duration">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="alert alert-success" ng-show="createNewDepositSuccess" style="width:90%">
+                            <strong>Success!</strong> {{name}}, {{createNewDepositSuccess}}.
+                        </div>
+                        <div class="alert alert-danger" ng-show="createNewDepositError" style="width:90%">
+                            <strong>Danger!</strong> {{name}}, {{createNewDepositError}}.
+                        </div>
+                    </div>
+                    <!-- pre open deposit -->
+                    <div ng-switch-when="showPreOpenDeposit">
+                        <h2 class="sub-header">{{name}}, Please Enter Deposit ID To Pre Open</h2>
+                        <form class="form-horizontal" role="form" ng-submit="preOpenDeposit(depositId)" style="width:90%">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Deposit ID To Pre Open:</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" placeholder="Enter deposit ID to pre open" 
+                                                                    ng-model="depositId">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="alert alert-success" ng-show="preOpenDepositSuccess" style="width:90%">
+                            <strong>Success!</strong> {{name}}, {{preOpenDepositSuccess}}.
+                        </div>
+                        <div class="alert alert-danger" ng-show="preOpenDepositError" style="width:90%">
+                            <strong>Danger!</strong> {{name}}, {{preOpenDepositError}}.
+                        </div>
+                    </div>
+                    <!-- view activities -->
+                    <div ng-switch-when="showViewActivities">
+                        <h2 class="sub-header">{{name}}, Here Is A Summary Of Your Activities</h2>
+                        <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>amount, USD</th>
+                            <th>commission, USD</th>
+                            <th>activityDate</th>
+                            <th>description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="activity in activities">
+                            <td>{{activity.id}}</td>
+                            <td>{{activity.amount}}</td>
+                            <td>{{activity.commission}}</td>
+                            <td>{{activity.activityDate}}</td>
+                            <td>{{activity.description}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                    </div>
 				</div>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Header</th>
-							<th>Header</th>
-							<th>Header</th>
-							<th>Header</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1,001</td>
-							<td>Lorem</td>
-							<td>ipsum</td>
-							<td>dolor</td>
-							<td>sit</td>
-						</tr>
-					</tbody>
-				</table>
 			</div>
 		</div>
 	</div>
