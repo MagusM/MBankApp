@@ -136,6 +136,30 @@
                                     <td>{{dep.closingDate}}</td>
                                 </tr>
                             </tbody>
+                            </table>
+                            <table class="table table-striped" ng-show="deposit" style="width:90%">
+                            <thead>
+                                <tr>
+                                    <th>deposit id</th>
+                                    <th>owner</th>
+                                    <th>balance,USD</th>
+                                    <th>estimated balance,USD</th>
+                                    <th>deposit type</th>
+                                    <th>opening date</th>
+                                    <th>closing type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{deposit.depositId}}</td>
+                                    <td>{{name}}</td>
+                                    <td>{{deposit.balance}}</td>
+                                    <td>{{deposit.estimatedBalance}}</td>
+                                    <td>{{deposit.depositType}}</td>
+                                    <td>{{deposit.openingDate}}</td>
+                                    <td>{{deposit.closingDate}}</td>
+                                </tr>
+                            </tbody>
                        </table>
 					</div>
                     <!-- deposit to account -->

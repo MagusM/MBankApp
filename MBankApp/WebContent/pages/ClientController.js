@@ -72,20 +72,17 @@
 		/*
 		 * update client
 		 */
-		$scope.clientUpdateError;
-		$scope.clientUpdateSuccess;
 		$scope.updateClient = function(client){
 			$scope.clientUpdateError = null;
 			$scope.clientUpdateSuccess = null;
 			var url = "http://localhost:8080/MBankApp/MBank/MBankRoot/updateClientDestails";
 			var onUserUpdateComplete = function(response) {
-				$scope.clientUpdateError = null;
 				$scope.clientUpdateSuccess = "You're account information updated";
 			};
 			var omUserUpdateError = function(reason) {
-				$scope.clientUpdateSuccess = null;
 				$scope.clientUpdateError = "Updating you're account information failed";
 			};
+			mbank.sendDataToMbank(url, client).then(onUserUpdateComplete, omUserUpdateError);
 		};
 		/*
 		 * view account
@@ -111,10 +108,21 @@
 		 * view deposits.
 		 */
 		var viewDepositsDetails = function() {
+			$scope.deposit = null;
+			$scope.deposits = null;
 			var url = "http://localhost:8080/MBankApp/MBank/MBankRoot/viewClientDeposits";
+			var count;
 			var onGetDepositsComplete = function(response){
-				var deposits = response.data.wrappedDeposits;
-				$scope.deposits = deposits;
+//				var deposits = response.data.wrappedDeposits;
+				count = Object.keys(response.data).length;
+				var one = response.data;
+				if (count > 1) {
+					$scope.deposit = response.data;
+				}
+				else {
+					$scope.deposits = response.data.wrappedDeposits;
+				}
+				
 			}
 			var onGetDepoitsError = function(reason) {
 				redirectToHomePage();

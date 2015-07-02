@@ -6,7 +6,7 @@
 			console.log("trying to logout");
 			var url = "http://localhost:8080/MBankApp/MBank/MBankRoot/logout";
 			var logoutSuccess = function(response) {
-				if (status == 201) {
+				if (status == 200) {
 					$location.path("/main");
 				}
 			};

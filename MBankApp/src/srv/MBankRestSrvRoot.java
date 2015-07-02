@@ -7,8 +7,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -22,6 +24,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import wrapClasses.ClientBeanWrapper;
+import wrapClasses.DepositBeanWrapper;
 import actions.ClientActions;
 import beans.AccountsBean;
 import beans.ActivityBean;
@@ -33,6 +36,8 @@ import com.sun.jersey.spi.resource.Singleton;
 import com.util.SummaryDetails;
 import com.util.WrappedActivities;
 import com.util.WrappedDeposits;
+
+import enums.AccountType;
 
 /**
  * This class defines the control of MBank RESTful services 
@@ -102,7 +107,7 @@ public class MBankRestSrvRoot {
 			session.removeAttribute("clientAction");
 			session.removeAttribute("id");
 			session.invalidate();
-			return Response.status(201).build();
+			return Response.ok().build();
 		}
 		return Response.status(Responses.NOT_ACCEPTABLE).build();
 	}
@@ -124,6 +129,7 @@ public class MBankRestSrvRoot {
 		int id = 0;
 		try {
 			ca = (ClientActions) session.getAttribute("clientAction");
+			
 			id = (int) session.getAttribute("id");
 		} catch (Exception e) {
 			return Response.status(Responses.NOT_ACCEPTABLE).build();
@@ -165,25 +171,30 @@ public class MBankRestSrvRoot {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateClientDestails(String json, @Context HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+			return Response.status(Responses.CONFLICT).build();
+		}
+		ClientActions ca = (ClientActions) session.getAttribute("clientAction");
+		if (ca == null) {
+			return Response.status(Responses.CONFLICT).build();
+		}
+		ClientBean refClient = ca.getClientObjectById((int) session.getAttribute("id"));
 		ClientBean client = null;
 		try {
+			System.out.println(json);
 			JSONObject js  = new JSONObject(json);
 			client = new ClientBean();
 			client.setId((int) session.getAttribute("id"));
 			client.setEmail(js.getString("email"));
 			client.setAddress(js.getString("address"));
-			client.setName(js.getString("name"));
+			client.setName(refClient.getName());
 			client.setPassword(js.getString("password"));
 			client.setPhone(js.getString("phone"));
+			client.setType(AccountType.getTypeFromString(refClient.getType()));
 		} catch (JSONException | MBankException e) {
 			return Response.status(Responses.CONFLICT).build();
 		}
-		ClientActions ca = (ClientActions) session.getAttribute("clientAction");
 		ca.updateClientDetails(client);
-		ClientBean refClient = ca.getClientObjectById(client.getId());
-		if (!refClient.equals(client)) {
-			return Response.status(Responses.CONFLICT).build();
-		}
 		return Response.ok().build();
 	}
 	
@@ -229,6 +240,9 @@ public class MBankRestSrvRoot {
 		List<DepositBean> depositsBeans = ca.viewClientDeposits(ca.getClientObjectById((int) session.getAttribute("id")));
 		WrappedDeposits wrappedDeposits = new WrappedDeposits();
 		wrappedDeposits.setWrappedDepositsFromDepositsBeans(depositsBeans);
+		if (wrappedDeposits.getWrappedDeposits().size() == 1) {
+			return Response.ok(wrappedDeposits.getWrappedDeposits().get(0)).build();
+		}
 		return Response.ok(wrappedDeposits).build(); 
 	}
 	
@@ -324,7 +338,6 @@ public class MBankRestSrvRoot {
 	 */
 	@Path("/preOpendeposit")
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
 	public Response preOpendeposit(String depositId, @Context HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
 		if (session == null) {
@@ -337,7 +350,7 @@ public class MBankRestSrvRoot {
 		DepositBean deposit = ca.getDepositById(Integer.parseInt(depositId));
 		ClientBean client = ca.getClientObjectById((int) session.getAttribute("id"));
 		ca.preOpenDeposit(client, deposit);
-		return Response.status(201).build();
+		return Response.ok().build();
 	}
 	
 	/**
